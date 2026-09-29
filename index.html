@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projeto Escolar</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- CABEÇALHO -->
+    <header class="cabecalho">
+
+        <div class="logo">
+            🌱 Projeto Escolar
+        </div>
+
+        <div class="carrinho">
+            🛒 <span id="quantidade-carrinho">0</span>
+        </div>
+
+    </header>
+
+
+    <!-- APRESENTAÇÃO -->
+    <section class="inicio">
+
+        <h1>Produtos criados pelos nossos alunos</h1>
+
+        <p>
+            Conheça os produtos desenvolvidos pelos estudantes
+            e participe da nossa iniciativa escolar.
+        </p>
+
+        <button onclick="irParaProdutos()">
+            CONHECER PRODUTOS
+        </button>
+
+    </section>
+
+
+    <!-- PRODUTOS -->
+    <section class="produtos" id="produtos">
+
+        <h2>Nossos produtos</h2>
+
+        <div class="lista-produtos">
+
+
+            <!-- PRODUTO 1 -->
+            <div class="produto">
+
+                <div class="imagem-produto">
+                    📦
+                </div>
+
+                <h3>Produto 1</h3>
+
+                <p class="descricao">
+                    Descrição do primeiro produto.
+                </p>
+
+                <p class="preco">
+                    R$ 10,00
+                </p>
+
+                <button onclick="adicionarProduto('Produto 1', 10)">
+                    ADICIONAR
+                </button>
+
+            </div>
+
+
+            <!-- PRODUTO 2 -->
+            <div class="produto">
+
+                <div class="imagem-produto">
+                    🌱
+                </div>
+
+                <h3>Produto 2</h3>
+
+                <p class="descricao">
+                    Descrição do segundo produto.
+                </p>
+
+                <p class="preco">
+                    R$ 15,00
+                </p>
+
+                <button onclick="adicionarProduto('Produto 2', 15)">
+                    ADICIONAR
+                </button>
+
+            </div>
+
+
+            <!-- PRODUTO 3 -->
+            <div class="produto">
+
+                <div class="imagem-produto">
+                    🧺
+                </div>
+
+                <h3>Produto 3</h3>
+
+                <p class="descricao">
+                    Descrição do terceiro produto.
+                </p>
+
+                <p class="preco">
+                    R$ 8,00
+                </p>
+
+                <button onclick="adicionarProduto('Produto 3', 8)">
+                    ADICIONAR
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CARRINHO -->
+    <section class="carrinho-area">
+
+        <h2>🛒 Meu pedido</h2>
+
+        <div id="lista-carrinho">
+            <p>Seu pedido está vazio.</p>
+        </div>
+
+        <h3>
+            Total:
+            R$ <span id="total">0,00</span>
+        </h3>
+
+        <button id="finalizar" onclick="finalizarPedido()">
+            FINALIZAR PRÉ-VENDA
+        </button>
+
+    </section>
+
+
+    <!-- RODAPÉ -->
+    <footer>
+
+        <p>
+            Projeto desenvolvido pelos estudantes
+        </p>
+
+        <p>
+            © 2026 - Projeto Escolar
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
