@@ -1,395 +1,317 @@
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbxxcUflx_gxEniGdiVFB_N3apQjy7YeCYXGvBKlMdvaf1ewNhAOzk4eTjHxSMC3fhHTyw/exec";
+
+let carrinho = [];
+let pedidoEmProcessamento = false;
+const CHAVE_PIX = "6b00a155-cbbe-4c31-aa39-bfb551694181";
+
+function formatarValor(valor) {
+    return Number(valor).toFixed(2).replace(".", ",");
 }
 
-:root {
-    --verde-escuro: #174d32;
-    --verde: #287a4b;
-    --verde-claro: #eaf5ed;
-    --branco: #ffffff;
-    --cinza: #f4f6f4;
-    --texto: #28352d;
-    --borda: #d8e2da;
-    --vermelho: #b3261e;
+function adicionarProduto(nome, preco) {
+    if (pedidoEmProcessamento) return;
+
+    carrinho.push({
+        nome: nome,
+        preco: Number(preco)
+    });
+
+    atualizarCarrinho();
 }
 
-html {
-    scroll-behavior: smooth;
+function removerProduto(indice) {
+    if (pedidoEmProcessamento) return;
+    if (indice < 0 || indice >= carrinho.length) return;
+
+    carrinho.splice(indice, 1);
+    atualizarCarrinho();
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--texto);
-    background: var(--cinza);
-    line-height: 1.6;
-}
+function atualizarCarrinho() {
+    const lista = document.getElementById("lista-carrinho");
+    const quantidade = document.getElementById("quantidade-carrinho");
+    const totalElemento = document.getElementById("total");
 
-[hidden] {
-    display: none !important;
-}
+    if (!lista || !quantidade || !totalElemento) return;
 
-.cabecalho {
-    background: var(--verde-escuro);
-    color: var(--branco);
-    text-align: center;
-    padding: 40px 20px 45px;
-}
+    lista.replaceChildren();
+    quantidade.textContent = carrinho.length;
 
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+    const total = carrinho.reduce(function (soma, produto) {
+        return soma + produto.preco;
+    }, 0);
 
-.cabecalho p {
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
+    totalElemento.textContent = "R$ " + formatarValor(total);
 
-.cabecalho h1 {
-    font-size: clamp(25px, 4vw, 38px);
-    margin: 15px 0 25px;
-}
+    if (carrinho.length === 0) {
+        const vazio = document.createElement("p");
+        vazio.className = "carrinho-vazio";
+        vazio.textContent = "Seu pedido ainda está vazio.";
+        lista.appendChild(vazio);
+    } else {
+        carrinho.forEach(function (produto, indice) {
+            const linha = document.createElement("div");
+            linha.className = "item-carrinho";
 
-.botao {
-    display: inline-block;
-    border: none;
-    border-radius: 8px;
-    background: var(--verde);
-    color: var(--branco);
-    padding: 12px 18px;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
+            const informacao = document.createElement("span");
+            informacao.className = "item-carrinho-info";
+            informacao.textContent =
+                produto.nome + " — R$ " + formatarValor(produto.preco);
 
-.botao:hover {
-    background: var(--verde-escuro);
-    transform: translateY(-1px);
-}
+            const botaoRemover = document.createElement("button");
+            botaoRemover.type = "button";
+            botaoRemover.className = "botao-remover";
+            botaoRemover.textContent = "Remover";
+            botaoRemover.disabled = pedidoEmProcessamento;
 
-.botao:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
+            botaoRemover.addEventListener("click", function () {
+                removerProduto(indice);
+            });
 
-.botao-claro {
-    background: var(--branco);
-    color: var(--verde-escuro);
-}
-
-.botao-claro:hover {
-    background: var(--verde-claro);
-    color: var(--verde-escuro);
-}
-
-.botao-secundario {
-    background: #64756a;
-    margin-left: 5px;
-}
-
-.botao-secundario:hover {
-    background: #48584d;
-}
-
-.introducao {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px 20px;
-    text-align: center;
-}
-
-.introducao h2,
-.secao-produtos h2,
-.carrinho-area h2,
-.formulario-area h2 {
-    color: var(--verde-escuro);
-    margin-bottom: 15px;
-}
-
-.introducao p {
-    margin-bottom: 10px;
-}
-
-.secao-produtos {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 25px 20px 40px;
-}
-
-.secao-produtos > h2 {
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.produtos-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
-}
-
-.produto {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--branco);
-    border: 1px solid var(--borda);
-    border-radius: 12px;
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-}
-
-.produto-imagem {
-    font-size: 52px;
-    margin-bottom: 10px;
-}
-
-.produto h3 {
-    color: var(--verde-escuro);
-    margin-bottom: 8px;
-    font-size: 22px;
-}
-
-.descricao {
-    flex-grow: 1;
-    margin-bottom: 15px;
-}
-
-.preco {
-    font-size: 23px;
-    font-weight: bold;
-    color: var(--verde);
-    margin-bottom: 18px;
-}
-
-.produto .botao {
-    width: 100%;
-}
-
-.carrinho-area,
-.formulario-area {
-    max-width: 800px;
-    margin: 0 auto 35px;
-    padding: 28px;
-    background: var(--branco);
-    border: 1px solid var(--borda);
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-}
-
-.carrinho-area h2,
-.formulario-area h2 {
-    text-align: center;
-}
-
-.carrinho-area > p {
-    margin-bottom: 12px;
-}
-
-.lista-carrinho {
-    margin: 15px 0;
-}
-
-.carrinho-vazio {
-    color: #66736a;
-    padding: 10px 0;
-}
-
-.item-carrinho {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--borda);
-}
-
-.item-carrinho-info {
-    overflow-wrap: anywhere;
-}
-
-.botao-remover {
-    flex-shrink: 0;
-    padding: 7px 10px;
-    border: none;
-    border-radius: 6px;
-    color: var(--branco);
-    background: var(--vermelho);
-    cursor: pointer;
-}
-
-.botao-remover:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.total-carrinho {
-    font-size: 22px;
-    margin: 20px 0;
-    color: var(--verde-escuro);
-}
-
-.formulario-area > p {
-    margin-bottom: 20px;
-}
-
-.resumo-pedido {
-    background: var(--verde-claro);
-    padding: 18px;
-    margin: 20px 0;
-    border-radius: 8px;
-}
-
-.resumo-pedido h3 {
-    color: var(--verde-escuro);
-    margin-bottom: 10px;
-}
-
-.linha-resumo {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 5px 0;
-}
-
-.total-formulario {
-    font-size: 19px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--borda);
-}
-
-.campo {
-    margin-bottom: 18px;
-}
-
-.campo label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-.campo input,
-.campo select {
-    display: block;
-    width: 100%;
-    min-height: 45px;
-    padding: 10px 12px;
-    font-size: 16px;
-    color: var(--texto);
-    background: var(--branco);
-    border: 1px solid #aebdb1;
-    border-radius: 7px;
-}
-
-.campo input:focus,
-.campo select:focus {
-    outline: 2px solid var(--verde);
-    outline-offset: 1px;
-}
-
-.mensagem-pedido {
-    margin: 15px 0;
-    overflow-wrap: anywhere;
-}
-
-.rodape {
-    background: var(--verde-escuro);
-    color: var(--branco);
-    text-align: center;
-    padding: 25px 15px;
-}
-
-.rodape p {
-    margin: 5px 0;
-}
-
-@media (max-width: 750px) {
-    .produtos-grid {
-        grid-template-columns: 1fr;
+            linha.appendChild(informacao);
+            linha.appendChild(botaoRemover);
+            lista.appendChild(linha);
+        });
     }
 
-    .produto {
-        max-width: 450px;
-        width: 100%;
-        margin: 0 auto;
+    document.querySelectorAll(".produto button").forEach(function (botao) {
+        botao.disabled = pedidoEmProcessamento;
+    });
+
+    atualizarResumoPedido();
+}
+
+function atualizarResumoPedido() {
+    const resumo = document.getElementById("resumo-pedido");
+    const totalFormulario = document.getElementById("total-formulario");
+
+    if (!resumo || !totalFormulario) return;
+
+    resumo.replaceChildren();
+
+    const agrupamento = {};
+
+    carrinho.forEach(function (produto) {
+        if (!agrupamento[produto.nome]) {
+            agrupamento[produto.nome] = {
+                quantidade: 0,
+                preco: produto.preco
+            };
+        }
+
+        agrupamento[produto.nome].quantidade++;
+    });
+
+    Object.keys(agrupamento).forEach(function (nome) {
+        const item = agrupamento[nome];
+        const linha = document.createElement("div");
+        linha.className = "linha-resumo";
+
+        const descricao = document.createElement("span");
+        descricao.textContent = item.quantidade + " x " + nome;
+
+        const subtotal = document.createElement("strong");
+        subtotal.textContent =
+            "R$ " + formatarValor(item.quantidade * item.preco);
+
+        linha.appendChild(descricao);
+        linha.appendChild(subtotal);
+        resumo.appendChild(linha);
+    });
+
+    const total = carrinho.reduce(function (soma, produto) {
+        return soma + produto.preco;
+    }, 0);
+
+    totalFormulario.textContent = "R$ " + formatarValor(total);
+    atualizarPix();
+}
+
+function irParaProdutos() {
+    document.getElementById("produtos").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+function finalizarPedido() {
+    if (pedidoEmProcessamento) return;
+
+    if (carrinho.length === 0) {
+        alert("Adicione pelo menos um produto antes de continuar.");
+        return;
     }
 
-    .carrinho-area,
-    .formulario-area {
-        margin-left: 12px;
-        margin-right: 12px;
-        padding: 20px;
-    }
+    atualizarResumoPedido();
 
-    .botao {
-        max-width: 100%;
+    const formularioPedido = document.getElementById("formulario-pedido");
+    formularioPedido.hidden = false;
+
+    formularioPedido.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function novoPedido() {
+    carrinho = [];
+    pedidoEmProcessamento = false;
+
+    const formulario = document.getElementById("formulario");
+    const formularioPedido = document.getElementById("formulario-pedido");
+    const confirmar = document.getElementById("confirmar-pedido");
+    const botaoNovo = document.getElementById("novo-pedido");
+    const mensagem = document.getElementById("mensagem-pedido");
+
+    formulario.reset();
+    atualizarPix();
+    formulario.dataset.enviando = "nao";
+
+    confirmar.disabled = false;
+    confirmar.hidden = false;
+    botaoNovo.hidden = true;
+    mensagem.textContent = "";
+
+    atualizarCarrinho();
+    formularioPedido.hidden = true;
+
+    document.getElementById("produtos").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+function atualizarPix() {
+    const pagamento = document.getElementById("pagamento");
+    const areaPix = document.getElementById("pix-area");
+    const totalPix = document.getElementById("pix-total");
+
+    if (!pagamento || !areaPix || !totalPix) return;
+
+    const pixSelecionado = pagamento.value === "Pix antecipado";
+
+    areaPix.hidden = !pixSelecionado;
+
+    if (pixSelecionado) {
+        const total = carrinho.reduce(function (soma, produto) {
+            return soma + produto.preco;
+        }, 0);
+
+        totalPix.textContent = "R$ " + formatarValor(total);
     }
 }
 
-@media (max-width: 420px) {
-    .cabecalho {
-        padding: 30px 15px;
-    }
+async function copiarChavePix() {
+    try {
+        await navigator.clipboard.writeText(CHAVE_PIX);
 
-    .logo {
-        font-size: 24px;
-    }
+        document.getElementById("mensagem-pix").textContent =
+            "Chave Pix copiada!";
 
-    .item-carrinho {
-        align-items: flex-start;
-    }
-
-    .carrinho-area .botao {
-        width: 100%;
-        margin: 5px 0;
+    } catch (erro) {
+        document.getElementById("mensagem-pix").textContent =
+            "Não foi possível copiar automaticamente. Selecione e copie a chave acima.";
     }
 }
-.pix-area {
-    background: var(--verde-claro);
-    border: 1px solid var(--borda);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px 0;
-    text-align: center;
-}
 
-.pix-area h3 {
-    color: var(--verde-escuro);
-    margin-bottom: 12px;
-}
+document.addEventListener("DOMContentLoaded", function () {
+    atualizarCarrinho();
 
-.pix-total {
-    display: block;
-    color: var(--verde);
-    font-size: 28px;
-    margin: 8px 0 18px;
-}
+    const formulario = document.getElementById("formulario");
+    if (!formulario) return;
 
-.pix-chave {
-    background: var(--branco);
-    border: 1px dashed var(--verde);
-    border-radius: 7px;
-    padding: 12px;
-    margin: 12px 0;
-    overflow-wrap: anywhere;
-    font-weight: bold;
-}
+const campoPagamento = document.getElementById("pagamento");
+const botaoCopiarPix = document.getElementById("copiar-pix");
 
-.pix-aviso {
-    font-size: 14px;
-    margin-top: 15px;
-}
+campoPagamento.addEventListener("change", atualizarPix);
+botaoCopiarPix.addEventListener("click", copiarChavePix);
 
-#mensagem-pix {
-    margin-top: 10px;
-    font-weight: bold;
-}
+atualizarPix();
+
+    formulario.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+
+        if (pedidoEmProcessamento) return;
+
+        if (carrinho.length === 0) {
+            document.getElementById("mensagem-pedido").textContent =
+                "Adicione pelo menos um produto antes de enviar.";
+            return;
+        }
+
+        if (!formulario.reportValidity()) return;
+
+        const nome = document.getElementById("nome").value.trim();
+        const whatsapp = document.getElementById("whatsapp").value.trim();
+        const pagamento = document.getElementById("pagamento").value;
+
+        if (!nome || !whatsapp || !pagamento) {
+            document.getElementById("mensagem-pedido").textContent =
+                "Preencha todos os campos antes de enviar.";
+            return;
+        }
+
+        const quantidades = {
+            chaveiros: 0,
+            sonhos: 0,
+            aromatizadores: 0
+        };
+
+        carrinho.forEach(function (produto) {
+            if (produto.nome === "Chaveiro") {
+                quantidades.chaveiros++;
+            } else if (produto.nome === "Sonho") {
+                quantidades.sonhos++;
+            } else if (produto.nome === "Aromatizador") {
+                quantidades.aromatizadores++;
+            }
+        });
+
+        const dadosPedido = {
+            nome: nome,
+            whatsapp: whatsapp,
+            pagamento: pagamento,
+            chaveiros: quantidades.chaveiros,
+            sonhos: quantidades.sonhos,
+            aromatizadores: quantidades.aromatizadores
+        };
+
+        const confirmar = document.getElementById("confirmar-pedido");
+        const mensagem = document.getElementById("mensagem-pedido");
+        const botaoNovo = document.getElementById("novo-pedido");
+
+        pedidoEmProcessamento = true;
+        formulario.dataset.enviando = "sim";
+        confirmar.disabled = true;
+
+        atualizarCarrinho();
+        mensagem.textContent = "Enviando seu pedido. Aguarde...";
+
+        try {
+            await fetch(URL_PLANILHA, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(dadosPedido)
+            });
+
+            mensagem.textContent =
+                "Solicitação enviada. Confira a aba Pedidos da planilha antes de considerar o pedido confirmado.";
+
+            confirmar.hidden = true;
+            botaoNovo.hidden = false;
+        } catch (erro) {
+            console.error("Erro ao enviar pedido:", erro);
+
+            mensagem.textContent =
+                "Não foi possível confirmar o envio. Confira a planilha antes de tentar novamente para evitar duplicidade.";
+
+            pedidoEmProcessamento = false;
+            formulario.dataset.enviando = "nao";
+            confirmar.disabled = false;
+
+            atualizarCarrinho();
+        }
+    });
+});
