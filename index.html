@@ -1,169 +1,160 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Projeto Escolar</title>
-
+    <title>JEPP 2026 - ETAM São Francisco de Assis</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
-
 <body>
-
-    <!-- CABEÇALHO -->
     <header class="cabecalho">
-
-        <div class="logo">
-            🌱 Projeto Escolar
-        </div>
-
-        <div class="carrinho">
-            🛒 <span id="quantidade-carrinho">0</span>
-        </div>
-
+        <div class="logo">🌱 JEPP 2026</div>
+        <p>ETAM "SÃO FRANCISCO DE ASSIS"</p>
+        <h1>Pequenos negócios, grandes ideias!</h1>
+        <a href="#produtos" class="botao botao-claro">Conheça nossos produtos</a>
     </header>
 
+    <main>
+        <section class="introducao">
+            <h2>Bem-vindo à nossa feira!</h2>
+            <p>Conheça os produtos desenvolvidos pelos nossos alunos no projeto JEPP 2026.</p>
+            <p>Escolha seus produtos, informe seus dados e faça seu pedido. A retirada será realizada no dia do evento.</p>
+        </section>
 
-    <!-- APRESENTAÇÃO -->
-    <section class="inicio">
+        <section id="produtos" class="secao-produtos">
+            <h2>Nossos produtos</h2>
 
-        <h1>Produtos criados pelos nossos alunos</h1>
+            <div class="produtos-grid">
+                <article class="produto">
+                    <div class="produto-imagem">🔑</div>
+                    <h3>Chaveiro</h3>
+                    <p class="descricao">Um produto especial feito com dedicação pelos alunos.</p>
+                    <p class="preco">R$ 10,00</p>
+                    <button type="button" class="botao" onclick="adicionarProduto('Chaveiro', 10)">
+                        Adicionar ao pedido
+                    </button>
+                </article>
 
-        <p>
-            Conheça os produtos desenvolvidos pelos estudantes
-            e participe da nossa iniciativa escolar.
-        </p>
+                <article class="produto">
+                    <div class="produto-imagem">🍩</div>
+                    <h3>Sonho</h3>
+                    <p class="descricao">Uma opção deliciosa preparada para nossa feira.</p>
+                    <p class="preco">R$ 10,00</p>
+                    <button type="button" class="botao" onclick="adicionarProduto('Sonho', 10)">
+                        Adicionar ao pedido
+                    </button>
+                </article>
 
-        <button onclick="irParaProdutos()">
-            CONHECER PRODUTOS
-        </button>
+                <article class="produto">
+                    <div class="produto-imagem">🌸</div>
+                    <h3>Aromatizador</h3>
+                    <p class="descricao">Perfume e aconchego para deixar seu ambiente especial.</p>
+                    <p class="preco">R$ 8,00</p>
+                    <button type="button" class="botao" onclick="adicionarProduto('Aromatizador', 8)">
+                        Adicionar ao pedido
+                    </button>
+                </article>
+            </div>
+        </section>
 
-    </section>
+        <section id="carrinho-area" class="carrinho-area">
+            <h2>🛒 Seu pedido</h2>
 
+            <p>Quantidade de itens: <strong id="quantidade-carrinho">0</strong></p>
 
-    <!-- PRODUTOS -->
-    <section class="produtos" id="produtos">
-
-        <h2>Nossos produtos</h2>
-
-        <div class="lista-produtos">
-
-
-            <!-- PRODUTO 1 -->
-            <div class="produto">
-
-                <div class="imagem-produto">
-                    📦
-                </div>
-
-                <h3>Produto 1</h3>
-
-                <p class="descricao">
-                    Descrição do primeiro produto.
-                </p>
-
-                <p class="preco">
-                    R$ 10,00
-                </p>
-
-                <button onclick="adicionarProduto('Produto 1', 10)">
-                    ADICIONAR
-                </button>
-
+            <div id="lista-carrinho" class="lista-carrinho">
+                <p class="carrinho-vazio">Seu pedido ainda está vazio.</p>
             </div>
 
-
-            <!-- PRODUTO 2 -->
-            <div class="produto">
-
-                <div class="imagem-produto">
-                    🌱
-                </div>
-
-                <h3>Produto 2</h3>
-
-                <p class="descricao">
-                    Descrição do segundo produto.
-                </p>
-
-                <p class="preco">
-                    R$ 15,00
-                </p>
-
-                <button onclick="adicionarProduto('Produto 2', 15)">
-                    ADICIONAR
-                </button>
-
+            <div class="total-carrinho">
+                Total: <strong id="total">R$ 0,00</strong>
             </div>
 
+            <button type="button" class="botao" onclick="finalizarPedido()">
+                Continuar pedido
+            </button>
 
-            <!-- PRODUTO 3 -->
-            <div class="produto">
+            <button type="button" class="botao botao-secundario" onclick="irParaProdutos()">
+                Voltar aos produtos
+            </button>
+        </section>
 
-                <div class="imagem-produto">
-                    🧺
-                </div>
+        <section id="formulario-pedido" class="formulario-area" hidden>
+            <h2>Finalizar pedido</h2>
+            <p>Confira seus produtos, preencha os dados e escolha a forma de pagamento.</p>
 
-                <h3>Produto 3</h3>
-
-                <p class="descricao">
-                    Descrição do terceiro produto.
+            <div class="resumo-pedido">
+                <h3>Resumo da compra</h3>
+                <div id="resumo-pedido"></div>
+                <p class="total-formulario">
+                    Total do pedido: <strong id="total-formulario">R$ 0,00</strong>
                 </p>
-
-                <p class="preco">
-                    R$ 8,00
-                </p>
-
-                <button onclick="adicionarProduto('Produto 3', 8)">
-                    ADICIONAR
-                </button>
-
             </div>
 
-        </div>
+            <form id="formulario">
+                <div class="campo">
+                    <label for="nome">Nome completo:</label>
+                    <input type="text" id="nome" name="nome" autocomplete="name" maxlength="120" required>
+                </div>
 
-    </section>
+                <div class="campo">
+                    <label for="whatsapp">WhatsApp:</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel"
+                        placeholder="(00) 00000-0000" maxlength="25" required>
+                </div>
 
+                <div class="campo">
+                    <label for="pagamento">Forma de pagamento:</label>
+                    <select id="pagamento" name="pagamento" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="Pix antecipado">Pix antecipado</option>
+                        <option value="Pagamento na retirada">Pagamento na retirada</option>
+                    </select>
 
-    <!-- CARRINHO -->
-    <section class="carrinho-area">
+                    <div id="pix-area" class="pix-area" hidden>
+    <h3>Pagamento via Pix</h3>
 
-        <h2>🛒 Meu pedido</h2>
+    <p>Valor exato do seu pedido:</p>
+    <strong id="pix-total" class="pix-total">R$ 0,00</strong>
 
-        <div id="lista-carrinho">
-            <p>Seu pedido está vazio.</p>
-        </div>
+    <p>Utilize a chave Pix abaixo para realizar o pagamento:</p>
 
-        <h3>
-            Total:
-            R$ <span id="total">0,00</span>
-        </h3>
+    <div class="pix-chave">
+        <span id="chave-pix">6b00a155-cbbe-4c31-aa39-bfb551694181</span>
+    </div>
 
-        <button id="finalizar" onclick="finalizarPedido()">
-            FINALIZAR PRÉ-VENDA
-        </button>
+    <button type="button" id="copiar-pix" class="botao">
+        Copiar chave Pix
+    </button>
 
-    </section>
+    <p class="pix-aviso">
+        Após realizar o pagamento, aguarde a confirmação do responsável.
+        Seu pedido ficará aguardando a confirmação do pagamento.
+    </p>
 
+    <p id="mensagem-pix" role="status" aria-live="polite"></p>
+</div>
+                </div>
 
-    <!-- RODAPÉ -->
-    <footer>
+                <p id="mensagem-pedido" class="mensagem-pedido" role="status" aria-live="polite"></p>
 
-        <p>
-            Projeto desenvolvido pelos estudantes
-        </p>
+                <button type="submit" id="confirmar-pedido" class="botao">
+                    Enviar pedido
+                </button>
 
-        <p>
-            © 2026 - Projeto Escolar
-        </p>
+                <button type="button" id="novo-pedido" class="botao" onclick="novoPedido()" hidden>
+                    Fazer novo pedido
+                </button>
+            </form>
+        </section>
+    </main>
 
+    <footer class="rodape">
+        <p>JEPP 2026 — ETAM "SÃO FRANCISCO DE ASSIS"</p>
+        <p>Colina - SP</p>
+        <p>Educação, empreendedorismo e criatividade.</p>
     </footer>
-
-
-    <script src="script.js"></script>
-
 </body>
-
 </html>
