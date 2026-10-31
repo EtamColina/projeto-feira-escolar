@@ -32,10 +32,20 @@ body {
 }
 
 .cabecalho {
-    background: var(--verde-escuro);
+    background:
+        linear-gradient(
+            rgba(23, 77, 50, 0.72),
+            rgba(23, 77, 50, 0.72)
+        ),
+        url("imagens/fundo-jepp.jpg");
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
     color: var(--branco);
     text-align: center;
-    padding: 40px 20px 45px;
+    padding: 150px 20px 100px;
 }
 
 .logo {
