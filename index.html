@@ -5,13 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JEPP 2026 - ETAM São Francisco de Assis</title>
+    <link rel="icon" type="image/png" href="fcon.png">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <header class="cabecalho">
+        <img
+            src="imagens/assis.png"
+            alt="Símbolo da ETAM São Francisco de Assis"
+            class="imagem-escola"
+        >
+        <div>ETAM "SÃO FRANCISCO DE ASSIS"</div>
         <div class="logo">🌱 JEPP 2026</div>
-        <p>ETAM "SÃO FRANCISCO DE ASSIS"</p>
         <h1>Pequenos negócios, grandes ideias!</h1>
         <a href="#produtos" class="botao botao-claro">Conheça nossos produtos</a>
     </header>
@@ -28,31 +34,44 @@
 
             <div class="produtos-grid">
                 <article class="produto">
-                    <div class="produto-imagem">🔑</div>
-                    <h3>Chaveiro</h3>
-                    <p class="descricao">Um produto especial feito com dedicação pelos alunos.</p>
-                    <p class="preco">R$ 10,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Chaveiro', 10)">
-                        Adicionar ao pedido
-                    </button>
-                </article>
-
-                <article class="produto">
-                    <div class="produto-imagem">🍩</div>
-                    <h3>Sonho</h3>
+                   <img
+    src="imagens/sonho.creme.png"
+    alt="Sonho preparado pelos alunos"
+    class="produto-foto"
+>
+                    <h3>Sonho de Creme</h3>
                     <p class="descricao">Uma opção deliciosa preparada para nossa feira.</p>
                     <p class="preco">R$ 10,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Sonho', 10)">
+                    <button type="button" class="botao" onclick="adicionarProduto('Sonho de Creme', 10)">
                         Adicionar ao pedido
                     </button>
                 </article>
 
                 <article class="produto">
-                    <div class="produto-imagem">🌸</div>
-                    <h3>Aromatizador</h3>
-                    <p class="descricao">Perfume e aconchego para deixar seu ambiente especial.</p>
-                    <p class="preco">R$ 8,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Aromatizador', 8)">
+                    <img
+    src="imagens/sonho.doceleite.png"
+    alt="Sonho preparado pelos alunos"
+    class="produto-foto"
+>
+                    <h3>Sonho de Doce de Leite</h3>
+                    <p class="descricao">Uma opção deliciosa preparada para nossa feira.</p>
+                    <p class="preco">R$ 10,00</p>
+                    <button type="button" class="botao" onclick="adicionarProduto('Sonho de Doce de Leite', 10)">
+                        Adicionar ao pedido
+                    </button>
+                </article>
+
+                <article class="produto">
+                    <img
+    src="imagens/Escalda Pés.png"
+    alt="Escalda pés preparado pelos alunos"
+    class="produto-foto">
+
+                    
+                    <h3>Escalda Pés</h3>
+                    <p class="descricao">Sensação de bem estar imediato.</p>
+                    <p class="preco">R$ 5,00</p>
+                    <button type="button" class="botao" onclick="adicionarProduto('Escalda Pés', 5)">
                         Adicionar ao pedido
                     </button>
                 </article>
