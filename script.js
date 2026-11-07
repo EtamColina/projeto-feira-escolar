@@ -3,18 +3,35 @@ const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbxxcUflx_gxEniGdiV
 
 let carrinho = [];
 let pedidoEmProcessamento = false;
-const CHAVE_PIX = "6b00a155-cbbe-4c31-aa39-bfb551694181";
+
+// Catálogo de produtos
+const PRODUTOS = {
+    "Sonho de Creme": 10,
+    "Sonho de Doce de Leite": 10,
+    "Escalda Pés": 5
+};
 
 function formatarValor(valor) {
     return Number(valor).toFixed(2).replace(".", ",");
 }
 
+function calcularTotal() {
+    return carrinho.reduce(function (soma, produto) {
+        return soma + produto.preco;
+    }, 0);
+}
+
 function adicionarProduto(nome, preco) {
     if (pedidoEmProcessamento) return;
 
+    if (!Object.prototype.hasOwnProperty.call(PRODUTOS, nome)) {
+        alert("Produto não reconhecido.");
+        return;
+    }
+
     carrinho.push({
         nome: nome,
-        preco: Number(preco)
+        preco: PRODUTOS[nome]
     });
 
     atualizarCarrinho();
@@ -38,11 +55,7 @@ function atualizarCarrinho() {
     lista.replaceChildren();
     quantidade.textContent = carrinho.length;
 
-    const total = carrinho.reduce(function (soma, produto) {
-        return soma + produto.preco;
-    }, 0);
-
-    totalElemento.textContent = "R$ " + formatarValor(total);
+    totalElemento.textContent = "R$ " + formatarValor(calcularTotal());
 
     if (carrinho.length === 0) {
         const vazio = document.createElement("p");
@@ -105,6 +118,7 @@ function atualizarResumoPedido() {
 
     Object.keys(agrupamento).forEach(function (nome) {
         const item = agrupamento[nome];
+
         const linha = document.createElement("div");
         linha.className = "linha-resumo";
 
@@ -120,12 +134,8 @@ function atualizarResumoPedido() {
         resumo.appendChild(linha);
     });
 
-    const total = carrinho.reduce(function (soma, produto) {
-        return soma + produto.preco;
-    }, 0);
-
-    totalFormulario.textContent = "R$ " + formatarValor(total);
-    atualizarPix();
+    totalFormulario.textContent =
+        "R$ " + formatarValor(calcularTotal());
 }
 
 function irParaProdutos() {
@@ -164,11 +174,11 @@ function novoPedido() {
     const mensagem = document.getElementById("mensagem-pedido");
 
     formulario.reset();
-    atualizarPix();
-    formulario.dataset.enviando = "nao";
 
     confirmar.disabled = false;
     confirmar.hidden = false;
+    confirmar.textContent = "Continuar para pagamento";
+
     botaoNovo.hidden = true;
     mensagem.textContent = "";
 
@@ -180,61 +190,53 @@ function novoPedido() {
     });
 }
 
-function atualizarPix() {
-    const pagamento = document.getElementById("pagamento");
-    const areaPix = document.getElementById("pix-area");
-    const totalPix = document.getElementById("pix-total");
-
-    if (!pagamento || !areaPix || !totalPix) return;
-
-    const pixSelecionado = pagamento.value === "Pix antecipado";
-
-    areaPix.hidden = !pixSelecionado;
-
-    if (pixSelecionado) {
-        const total = carrinho.reduce(function (soma, produto) {
-            return soma + produto.preco;
-        }, 0);
-
-        totalPix.textContent = "R$ " + formatarValor(total);
+// Gera identificador exclusivo para a tentativa de pedido
+function gerarIdentificadorPedido() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
     }
+
+    return "jepp-" + Date.now() + "-" +
+        Math.random().toString(36).substring(2, 12);
 }
 
-async function copiarChavePix() {
-    try {
-        await navigator.clipboard.writeText(CHAVE_PIX);
+// Envia o pedido ao Google Apps Script por formulário.
+// A resposta do servidor abre a página com o acesso ao checkout.
+function enviarParaCheckout(dadosPedido) {
+    const formularioEnvio = document.createElement("form");
 
-        document.getElementById("mensagem-pix").textContent =
-            "Chave Pix copiada!";
+    formularioEnvio.method = "POST";
+    formularioEnvio.action = URL_PLANILHA;
+    formularioEnvio.target = "_self";
+    formularioEnvio.style.display = "none";
 
-    } catch (erro) {
-        document.getElementById("mensagem-pix").textContent =
-            "Não foi possível copiar automaticamente. Selecione e copie a chave acima.";
-    }
+    const campoPayload = document.createElement("input");
+
+    campoPayload.type = "hidden";
+    campoPayload.name = "payload";
+    campoPayload.value = JSON.stringify(dadosPedido);
+
+    formularioEnvio.appendChild(campoPayload);
+    document.body.appendChild(formularioEnvio);
+
+    formularioEnvio.submit();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
     atualizarCarrinho();
 
     const formulario = document.getElementById("formulario");
+
     if (!formulario) return;
 
-const campoPagamento = document.getElementById("pagamento");
-const botaoCopiarPix = document.getElementById("copiar-pix");
-
-campoPagamento.addEventListener("change", atualizarPix);
-botaoCopiarPix.addEventListener("click", copiarChavePix);
-
-atualizarPix();
-
-    formulario.addEventListener("submit", async function (evento) {
+    formulario.addEventListener("submit", function (evento) {
         evento.preventDefault();
 
         if (pedidoEmProcessamento) return;
 
         if (carrinho.length === 0) {
             document.getElementById("mensagem-pedido").textContent =
-                "Adicione pelo menos um produto antes de enviar.";
+                "Adicione pelo menos um produto antes de continuar.";
             return;
         }
 
@@ -242,76 +244,56 @@ atualizarPix();
 
         const nome = document.getElementById("nome").value.trim();
         const whatsapp = document.getElementById("whatsapp").value.trim();
-        const pagamento = document.getElementById("pagamento").value;
 
-        if (!nome || !whatsapp || !pagamento) {
+        if (!nome || !whatsapp) {
             document.getElementById("mensagem-pedido").textContent =
-                "Preencha todos os campos antes de enviar.";
+                "Preencha seu nome e WhatsApp.";
             return;
         }
 
+        // Quantidades dos três produtos
         const quantidades = {
-            chaveiros: 0,
-            sonhos: 0,
-            aromatizadores: 0
+            sonhoCreme: 0,
+            sonhoDoceLeite: 0,
+            escaldaPes: 0
         };
 
         carrinho.forEach(function (produto) {
-            if (produto.nome === "Chaveiro") {
-                quantidades.chaveiros++;
-            } else if (produto.nome === "Sonho") {
-                quantidades.sonhos++;
-            } else if (produto.nome === "Aromatizador") {
-                quantidades.aromatizadores++;
+            if (produto.nome === "Sonho de Creme") {
+                quantidades.sonhoCreme++;
+            }
+
+            if (produto.nome === "Sonho de Doce de Leite") {
+                quantidades.sonhoDoceLeite++;
+            }
+
+            if (produto.nome === "Escalda Pés") {
+                quantidades.escaldaPes++;
             }
         });
 
         const dadosPedido = {
             nome: nome,
             whatsapp: whatsapp,
-            pagamento: pagamento,
-            chaveiros: quantidades.chaveiros,
-            sonhos: quantidades.sonhos,
-            aromatizadores: quantidades.aromatizadores
+            sonhoCreme: quantidades.sonhoCreme,
+            sonhoDoceLeite: quantidades.sonhoDoceLeite,
+            escaldaPes: quantidades.escaldaPes,
+            request_id: gerarIdentificadorPedido()
         };
 
         const confirmar = document.getElementById("confirmar-pedido");
         const mensagem = document.getElementById("mensagem-pedido");
-        const botaoNovo = document.getElementById("novo-pedido");
 
         pedidoEmProcessamento = true;
-        formulario.dataset.enviando = "sim";
+
         confirmar.disabled = true;
+        confirmar.textContent = "Encaminhando para pagamento...";
 
         atualizarCarrinho();
-        mensagem.textContent = "Enviando seu pedido. Aguarde...";
 
-        try {
-            await fetch(URL_PLANILHA, {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify(dadosPedido)
-            });
+        mensagem.textContent =
+            "Registrando seu pedido. Aguarde o encaminhamento para a InfinitePay.";
 
-            mensagem.textContent =
-                "Solicitação enviada. Confira a aba Pedidos da planilha antes de considerar o pedido confirmado.";
-
-            confirmar.hidden = true;
-            botaoNovo.hidden = false;
-        } catch (erro) {
-            console.error("Erro ao enviar pedido:", erro);
-
-            mensagem.textContent =
-                "Não foi possível confirmar o envio. Confira a planilha antes de tentar novamente para evitar duplicidade.";
-
-            pedidoEmProcessamento = false;
-            formulario.dataset.enviando = "nao";
-            confirmar.disabled = false;
-
-            atualizarCarrinho();
-        }
+        enviarParaCheckout(dadosPedido);
     });
 });
