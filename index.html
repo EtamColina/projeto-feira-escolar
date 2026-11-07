@@ -112,61 +112,71 @@
                 </p>
             </div>
 
-            <form id="formulario">
-                <div class="campo">
-                    <label for="nome">Nome completo:</label>
-                    <input type="text" id="nome" name="nome" autocomplete="name" maxlength="120" required>
-                </div>
+         <form id="formulario">
 
-                <div class="campo">
-                    <label for="whatsapp">WhatsApp:</label>
-                    <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel"
-                        placeholder="(00) 00000-0000" maxlength="25" required>
-                </div>
-
-                <div class="campo">
-                    <label for="pagamento">Forma de pagamento:</label>
-                    <select id="pagamento" name="pagamento" required>
-                        <option value="">Selecione uma opção</option>
-                        <option value="Pix antecipado">Pix antecipado</option>
-                        <option value="Pagamento na retirada">Pagamento na retirada</option>
-                    </select>
-
-                    <div id="pix-area" class="pix-area" hidden>
-    <h3>Pagamento via Pix</h3>
-
-    <p>Valor exato do seu pedido:</p>
-    <strong id="pix-total" class="pix-total">R$ 0,00</strong>
-
-    <p>Utilize a chave Pix abaixo para realizar o pagamento:</p>
-
-    <div class="pix-chave">
-        <span id="chave-pix">6b00a155-cbbe-4c31-aa39-bfb551694181</span>
+    <div class="campo">
+        <label for="nome">Nome completo:</label>
+        <input
+            type="text"
+            id="nome"
+            name="nome"
+            autocomplete="name"
+            maxlength="120"
+            required
+        >
     </div>
 
-    <button type="button" id="copiar-pix" class="botao">
-        Copiar chave Pix
+    <div class="campo">
+        <label for="whatsapp">WhatsApp:</label>
+        <input
+            type="tel"
+            id="whatsapp"
+            name="whatsapp"
+            autocomplete="tel"
+            placeholder="(00) 00000-0000"
+            maxlength="25"
+            required
+        >
+    </div>
+
+    <div class="aviso-pagamento">
+        <h3>Pagamento seguro</h3>
+        <p>
+            Para confirmar seu pedido, você será direcionado
+            ao ambiente seguro da InfinitePay.
+        </p>
+        <p>
+            Você poderá escolher entre Pix e cartão de crédito.
+            O pedido será confirmado após a aprovação do pagamento.
+        </p>
+    </div>
+
+    <p
+        id="mensagem-pedido"
+        class="mensagem-pedido"
+        role="status"
+        aria-live="polite"
+    ></p>
+
+    <button
+        type="submit"
+        id="confirmar-pedido"
+        class="botao"
+    >
+        Continuar para pagamento
     </button>
 
-    <p class="pix-aviso">
-        Após realizar o pagamento, aguarde a confirmação do responsável.
-        Seu pedido ficará aguardando a confirmação do pagamento.
-    </p>
+    <button
+        type="button"
+        id="novo-pedido"
+        class="botao"
+        onclick="novoPedido()"
+        hidden
+    >
+        Fazer novo pedido
+    </button>
 
-    <p id="mensagem-pix" role="status" aria-live="polite"></p>
-</div>
-                </div>
-
-                <p id="mensagem-pedido" class="mensagem-pedido" role="status" aria-live="polite"></p>
-
-                <button type="submit" id="confirmar-pedido" class="botao">
-                    Enviar pedido
-                </button>
-
-                <button type="button" id="novo-pedido" class="botao" onclick="novoPedido()" hidden>
-                    Fazer novo pedido
-                </button>
-            </form>
+</form>
         </section>
     </main>
 
