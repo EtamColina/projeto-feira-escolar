@@ -8,17 +8,47 @@ let pedidoEmProcessamento = false;
 const PRODUTOS = {
     "Sonho de Creme": 10,
     "Sonho de Doce de Leite": 10,
-    "Escalda Pés": 5
+    "Escalda Pés": 6
+};
+
+// Promoção dos Escalda Pés
+const PROMOCAO_ESCALDA_PES = {
+    quantidade: 3,
+    precoKit: 15,
+    precoAvulso: 6
 };
 
 function formatarValor(valor) {
     return Number(valor).toFixed(2).replace(".", ",");
 }
 
+// Calcula o preço dos Escalda Pés considerando a promoção
+function calcularPrecoEscaldaPes(quantidade) {
+    const kits = Math.floor(quantidade / PROMOCAO_ESCALDA_PES.quantidade);
+    const avulsos = quantidade % PROMOCAO_ESCALDA_PES.quantidade;
+
+    return (
+        kits * PROMOCAO_ESCALDA_PES.precoKit +
+        avulsos * PROMOCAO_ESCALDA_PES.precoAvulso
+    );
+}
+
+// Calcula o total de todo o carrinho
 function calcularTotal() {
-    return carrinho.reduce(function (soma, produto) {
-        return soma + produto.preco;
-    }, 0);
+    let total = 0;
+    let quantidadeEscaldaPes = 0;
+
+    carrinho.forEach(function (produto) {
+        if (produto.nome === "Escalda Pés") {
+            quantidadeEscaldaPes++;
+        } else {
+            total += produto.preco;
+        }
+    });
+
+    total += calcularPrecoEscaldaPes(quantidadeEscaldaPes);
+
+    return total;
 }
 
 function adicionarProduto(nome, preco) {
@@ -53,9 +83,11 @@ function atualizarCarrinho() {
     if (!lista || !quantidade || !totalElemento) return;
 
     lista.replaceChildren();
+
     quantidade.textContent = carrinho.length;
 
-    totalElemento.textContent = "R$ " + formatarValor(calcularTotal());
+    totalElemento.textContent =
+        "R$ " + formatarValor(calcularTotal());
 
     if (carrinho.length === 0) {
         const vazio = document.createElement("p");
@@ -69,6 +101,7 @@ function atualizarCarrinho() {
 
             const informacao = document.createElement("span");
             informacao.className = "item-carrinho-info";
+
             informacao.textContent =
                 produto.nome + " — R$ " + formatarValor(produto.preco);
 
@@ -84,6 +117,7 @@ function atualizarCarrinho() {
 
             linha.appendChild(informacao);
             linha.appendChild(botaoRemover);
+
             lista.appendChild(linha);
         });
     }
@@ -95,6 +129,7 @@ function atualizarCarrinho() {
     atualizarResumoPedido();
 }
 
+// Atualiza o resumo do formulário, incluindo a promoção
 function atualizarResumoPedido() {
     const resumo = document.getElementById("resumo-pedido");
     const totalFormulario = document.getElementById("total-formulario");
@@ -107,35 +142,81 @@ function atualizarResumoPedido() {
 
     carrinho.forEach(function (produto) {
         if (!agrupamento[produto.nome]) {
-            agrupamento[produto.nome] = {
-                quantidade: 0,
-                preco: produto.preco
-            };
+            agrupamento[produto.nome] = 0;
         }
 
-        agrupamento[produto.nome].quantidade++;
+        agrupamento[produto.nome]++;
     });
 
-    Object.keys(agrupamento).forEach(function (nome) {
-        const item = agrupamento[nome];
+    // Exibe os sonhos
+    ["Sonho de Creme", "Sonho de Doce de Leite"].forEach(function (nome) {
+        const quantidade = agrupamento[nome] || 0;
+
+        if (quantidade === 0) return;
+
+        const subtotal = quantidade * PRODUTOS[nome];
 
         const linha = document.createElement("div");
         linha.className = "linha-resumo";
 
         const descricao = document.createElement("span");
-        descricao.textContent = item.quantidade + " x " + nome;
+        descricao.textContent = quantidade + " x " + nome;
 
-        const subtotal = document.createElement("strong");
-        subtotal.textContent =
-            "R$ " + formatarValor(item.quantidade * item.preco);
+        const valor = document.createElement("strong");
+        valor.textContent = "R$ " + formatarValor(subtotal);
 
         linha.appendChild(descricao);
-        linha.appendChild(subtotal);
+        linha.appendChild(valor);
         resumo.appendChild(linha);
     });
 
+    // Exibe os Escalda Pés com a promoção aplicada
+    const quantidadeEscaldaPes = agrupamento["Escalda Pés"] || 0;
+
+    if (quantidadeEscaldaPes > 0) {
+        const kits = Math.floor(
+            quantidadeEscaldaPes / PROMOCAO_ESCALDA_PES.quantidade
+        );
+
+        const avulsos =
+            quantidadeEscaldaPes % PROMOCAO_ESCALDA_PES.quantidade;
+
+        if (kits > 0) {
+            adicionarLinhaResumo(
+                resumo,
+                kits + " x Kit Escalda Pés (3 unidades)",
+                kits * PROMOCAO_ESCALDA_PES.precoKit
+            );
+        }
+
+        if (avulsos > 0) {
+            adicionarLinhaResumo(
+                resumo,
+                avulsos + " x Escalda Pés avulso",
+                avulsos * PROMOCAO_ESCALDA_PES.precoAvulso
+            );
+        }
+    }
+
     totalFormulario.textContent =
         "R$ " + formatarValor(calcularTotal());
+}
+
+// Cria uma linha do resumo
+function adicionarLinhaResumo(resumo, descricaoTexto, subtotal) {
+    const linha = document.createElement("div");
+    linha.className = "linha-resumo";
+
+    const descricao = document.createElement("span");
+    descricao.textContent = descricaoTexto;
+
+    const valor = document.createElement("strong");
+    valor.textContent = "R$ " + formatarValor(subtotal);
+
+    linha.appendChild(descricao);
+    linha.appendChild(valor);
+
+    resumo.appendChild(linha);
 }
 
 function irParaProdutos() {
@@ -155,6 +236,7 @@ function finalizarPedido() {
     atualizarResumoPedido();
 
     const formularioPedido = document.getElementById("formulario-pedido");
+
     formularioPedido.hidden = false;
 
     formularioPedido.scrollIntoView({
@@ -183,6 +265,7 @@ function novoPedido() {
     mensagem.textContent = "";
 
     atualizarCarrinho();
+
     formularioPedido.hidden = true;
 
     document.getElementById("produtos").scrollIntoView({
@@ -200,8 +283,7 @@ function gerarIdentificadorPedido() {
         Math.random().toString(36).substring(2, 12);
 }
 
-// Envia o pedido ao Google Apps Script por formulário.
-// A resposta do servidor abre a página com o acesso ao checkout.
+// Envia o pedido ao Google Apps Script
 function enviarParaCheckout(dadosPedido) {
     const formularioEnvio = document.createElement("form");
 
@@ -251,7 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Quantidades dos três produtos
+        // Quantidades dos produtos enviados à planilha
         const quantidades = {
             sonhoCreme: 0,
             sonhoDoceLeite: 0,
