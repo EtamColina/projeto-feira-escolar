@@ -31,6 +31,8 @@ body {
     display: none !important;
 }
 
+/* CABEÇALHO */
+
 .cabecalho {
     background:
         linear-gradient(
@@ -63,6 +65,8 @@ body {
     font-size: clamp(25px, 4vw, 38px);
     margin: 15px 0 25px;
 }
+
+/* BOTÕES */
 
 .botao {
     display: inline-block;
@@ -109,6 +113,8 @@ body {
     background: #48584d;
 }
 
+/* INTRODUÇÃO */
+
 .introducao {
     max-width: 900px;
     margin: 0 auto;
@@ -127,6 +133,8 @@ body {
 .introducao p {
     margin-bottom: 10px;
 }
+
+/* PRODUTOS */
 
 .secao-produtos {
     max-width: 1100px;
@@ -183,6 +191,83 @@ body {
 .produto .botao {
     width: 100%;
 }
+
+/* POTES DE NATAL */
+
+.secao-potes-natal {
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 30px 20px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.secao-potes-natal h2 {
+    color: var(--verde-escuro);
+    margin-bottom: 12px;
+}
+
+.secao-potes-natal > p {
+    margin-bottom: 12px;
+}
+
+.secao-potes-natal > p:nth-of-type(2) {
+    color: var(--verde);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* GALERIA HORIZONTAL */
+
+.galeria-potes {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    margin: 22px 0 15px;
+    padding: 8px 4px 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--verde) var(--verde-claro);
+}
+
+.galeria-potes img {
+    flex: 0 0 280px;
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--borda);
+    scroll-snap-align: start;
+    background: var(--cinza);
+}
+
+.galeria-potes:focus-visible {
+    outline: 2px solid var(--verde);
+    outline-offset: 4px;
+}
+
+.galeria-potes::-webkit-scrollbar {
+    height: 9px;
+}
+
+.galeria-potes::-webkit-scrollbar-track {
+    background: var(--verde-claro);
+    border-radius: 10px;
+}
+
+.galeria-potes::-webkit-scrollbar-thumb {
+    background: var(--verde);
+    border-radius: 10px;
+}
+
+/* CARRINHO E FORMULÁRIO */
 
 .carrinho-area,
 .formulario-area {
@@ -247,6 +332,8 @@ body {
     color: var(--verde-escuro);
 }
 
+/* RESUMO DO PEDIDO */
+
 .formulario-area > p {
     margin-bottom: 20px;
 }
@@ -276,6 +363,8 @@ body {
     padding-top: 12px;
     border-top: 1px solid var(--borda);
 }
+
+/* CAMPOS DO FORMULÁRIO */
 
 .campo {
     margin-bottom: 18px;
@@ -311,6 +400,27 @@ body {
     overflow-wrap: anywhere;
 }
 
+/* AVISO DE PAGAMENTO */
+
+.aviso-pagamento {
+    background: var(--verde-claro);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 20px 0;
+}
+
+.aviso-pagamento h3 {
+    color: var(--verde-escuro);
+    margin-bottom: 10px;
+}
+
+.aviso-pagamento p {
+    margin-bottom: 8px;
+}
+
+/* RODAPÉ */
+
 .rodape {
     background: var(--verde-escuro);
     color: var(--branco);
@@ -322,47 +432,8 @@ body {
     margin: 5px 0;
 }
 
-@media (max-width: 750px) {
-    .produtos-grid {
-        grid-template-columns: 1fr;
-    }
+/* ÁREA PIX - MANTIDA */
 
-    .produto {
-        max-width: 450px;
-        width: 100%;
-        margin: 0 auto;
-    }
-
-    .carrinho-area,
-    .formulario-area {
-        margin-left: 12px;
-        margin-right: 12px;
-        padding: 20px;
-    }
-
-    .botao {
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 420px) {
-    .cabecalho {
-        padding: 30px 15px;
-    }
-
-    .logo {
-        font-size: 24px;
-    }
-
-    .item-carrinho {
-        align-items: flex-start;
-    }
-
-    .carrinho-area .botao {
-        width: 100%;
-        margin: 5px 0;
-    }
-}
 .pix-area {
     background: var(--verde-claro);
     border: 1px solid var(--borda);
@@ -404,6 +475,8 @@ body {
     font-weight: bold;
 }
 
+/* IMAGENS */
+
 .imagem-escola {
     width: 200px;
     height: 200px;
@@ -420,7 +493,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* Controle do tamanho das fotos dos produtos */
 .produto img {
     display: block;
     width: 100%;
@@ -429,4 +501,68 @@ body {
     object-fit: cover;
     border-radius: 10px;
     margin: 0 auto 15px;
+}
+
+/* TABLETS E CELULARES */
+
+@media (max-width: 750px) {
+
+    .produtos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .produto {
+        max-width: 450px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .secao-potes-natal {
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 22px 15px;
+    }
+
+    .galeria-potes img {
+        flex-basis: 240px;
+        width: 240px;
+        height: 240px;
+    }
+
+    .carrinho-area,
+    .formulario-area {
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 20px;
+    }
+
+    .botao {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .cabecalho {
+        padding: 30px 15px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .item-carrinho {
+        align-items: flex-start;
+    }
+
+    .carrinho-area .botao {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .galeria-potes img {
+        flex-basis: 220px;
+        width: 220px;
+        height: 220px;
+    }
 }
