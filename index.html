@@ -4,186 +4,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>JEPP 2026 - ETAM São Francisco de Assis</title>
+
     <link rel="icon" type="image/png" href="fcon.png">
     <link rel="stylesheet" href="style.css">
+
     <script src="script.js" defer></script>
 </head>
+
 <body>
+
     <header class="cabecalho">
+
         <img
             src="imagens/assis.png"
             alt="Símbolo da ETAM São Francisco de Assis"
             class="imagem-escola"
         >
+
         <div>ETAM "SÃO FRANCISCO DE ASSIS"</div>
+
         <div class="logo">🌱 JEPP 2026</div>
+
         <h1>Pequenos negócios, grandes ideias!</h1>
-        <a href="#produtos" class="botao botao-claro">Conheça nossos produtos</a>
+
+        <a href="#produtos" class="botao botao-claro">
+            Conheça nossos produtos
+        </a>
+
     </header>
 
     <main>
+
         <section class="introducao">
+
             <h2>Bem-vindo à nossa feira!</h2>
-            <p>Conheça os produtos desenvolvidos pelos nossos alunos no projeto JEPP 2026.</p>
-            <p>Escolha seus produtos, informe seus dados e faça seu pedido. A retirada será realizada no dia do evento.</p>
+
+            <p>
+                Conheça os produtos desenvolvidos pelos nossos alunos
+                no projeto JEPP 2026.
+            </p>
+
+            <p>
+                Escolha seus produtos, informe seus dados e faça seu pedido.
+                A retirada será realizada no dia do evento.
+            </p>
+
         </section>
 
+        <!-- PRODUTOS DISPONÍVEIS PARA PEDIDO -->
+
         <section id="produtos" class="secao-produtos">
+
             <h2>Nossos produtos</h2>
 
             <div class="produtos-grid">
+
+                <!-- SONHO DE CREME -->
+
                 <article class="produto">
-                   <img
-    src="imagens/sonho.creme.png"
-    alt="Sonho preparado pelos alunos"
-    class="produto-foto"
->
+
+                    <img
+                        src="imagens/sonho.creme.png"
+                        alt="Sonho preparado pelos alunos"
+                        class="produto-foto"
+                    >
+
                     <h3>Sonho de Creme</h3>
-                    <p class="descricao">Uma opção deliciosa preparada para nossa feira.</p>
+
+                    <p class="descricao">
+                        Uma opção deliciosa preparada para nossa feira.
+                    </p>
+
                     <p class="preco">R$ 10,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Sonho de Creme', 10)">
+
+                    <button
+                        type="button"
+                        class="botao"
+                        onclick="adicionarProduto('Sonho de Creme', 10)"
+                    >
                         Adicionar ao pedido
                     </button>
+
                 </article>
 
+                <!-- SONHO DE DOCE DE LEITE -->
+
                 <article class="produto">
+
                     <img
-    src="imagens/sonho.doceleite.png"
-    alt="Sonho preparado pelos alunos"
-    class="produto-foto"
->
+                        src="imagens/sonho.doceleite.png"
+                        alt="Sonho de doce de leite preparado pelos alunos"
+                        class="produto-foto"
+                    >
+
                     <h3>Sonho de Doce de Leite</h3>
-                    <p class="descricao">Uma opção deliciosa preparada para nossa feira.</p>
+
+                    <p class="descricao">
+                        Uma opção deliciosa preparada para nossa feira.
+                    </p>
+
                     <p class="preco">R$ 10,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Sonho de Doce de Leite', 10)">
+
+                    <button
+                        type="button"
+                        class="botao"
+                        onclick="adicionarProduto('Sonho de Doce de Leite', 10)"
+                    >
                         Adicionar ao pedido
                     </button>
+
                 </article>
+
+                <!-- ESCALDA PÉS -->
 
                 <article class="produto">
-                    <img
-    src="imagens/Escalda Pés.png"
-    alt="Escalda pés preparado pelos alunos"
-    class="produto-foto">
 
-                    
+                    <img
+                        src="imagens/Escalda Pés.png"
+                        alt="Escalda pés preparado pelos alunos"
+                        class="produto-foto"
+                    >
+
                     <h3>Escalda Pés</h3>
-                    <p class="descricao">Sensação de bem estar imediato.</p>
-                    <p class="preco">R$ 5,00</p>
-                    <button type="button" class="botao" onclick="adicionarProduto('Escalda Pés', 5)">
+
+                    <p class="descricao">
+                        Sensação de bem-estar e cuidado para os seus pés.
+                    </p>
+
+                    <p class="preco">
+                        R$ 6,00 cada
+                    </p>
+
+                    <p class="descricao">
+                        <strong>Promoção: 3 unidades por R$ 15,00!</strong>
+                    </p>
+
+                    <button
+                        type="button"
+                        class="botao"
+                        onclick="adicionarProduto('Escalda Pés', 6)"
+                    >
                         Adicionar ao pedido
                     </button>
+
                 </article>
+
             </div>
+
         </section>
 
+        <!-- POTES DE NATAL: EXPOSIÇÃO, SEM VENDA ANTECIPADA -->
+
+        <section class="secao-potes-natal">
+
+            <h2>🎄 Potes de Natal Enfeitados</h2>
+
+            <p class="descricao">
+                Peças decorativas produzidas com criatividade e dedicação.
+            </p>
+
+            <p>
+                Venha conferir na feira! Temos potes com preços variados.
+            </p>
+
+            <div
+                class="galeria-potes"
+                aria-label="Galeria de fotos dos potes de Natal"
+                tabindex="0"
+            >
+
+                <img
+                    src="pote-natal-01.jpg"
+                    alt="Pote de Natal decorado modelo 1"
+                    loading="lazy"
+                >
+
+                <img
+                    src="pote-natal-02.jpg"
+                    alt="Pote de Natal decorado modelo 2"
+                    loading="lazy"
+                >
+
+                <img
+                    src="pote-natal-03.jpg"
+                    alt="Pote de Natal decorado modelo 3"
+                    loading="lazy"
+                >
+
+                <img
+                    src="potes-natal-04.jpg"
+                    alt="Pote de Natal decorado modelo 4"
+                    loading="lazy"
+                >
+
+                <img
+                    src="pote-natal-05.jpg"
+                    alt="Pote de Natal decorado modelo 5"
+                    loading="lazy"
+                >
+
+                <img
+                    src="pote-natal-06.jpg"
+                    alt="Pote de Natal decorado modelo 6"
+                    loading="lazy"
+                >
+
+            </div>
+
+            <p class="descricao">
+                Deslize para o lado para conhecer todos os modelos.
+            </p>
+
+        </section>
+
+        <!-- CARRINHO -->
+
         <section id="carrinho-area" class="carrinho-area">
+
             <h2>🛒 Seu pedido</h2>
 
-            <p>Quantidade de itens: <strong id="quantidade-carrinho">0</strong></p>
+            <p>
+                Quantidade de itens:
+                <strong id="quantidade-carrinho">0</strong>
+            </p>
 
             <div id="lista-carrinho" class="lista-carrinho">
-                <p class="carrinho-vazio">Seu pedido ainda está vazio.</p>
+
+                <p class="carrinho-vazio">
+                    Seu pedido ainda está vazio.
+                </p>
+
             </div>
 
             <div class="total-carrinho">
-                Total: <strong id="total">R$ 0,00</strong>
+                Total:
+                <strong id="total">R$ 0,00</strong>
             </div>
 
-            <button type="button" class="botao" onclick="finalizarPedido()">
+            <button
+                type="button"
+                class="botao"
+                onclick="finalizarPedido()"
+            >
                 Continuar pedido
             </button>
 
-            <button type="button" class="botao botao-secundario" onclick="irParaProdutos()">
+            <button
+                type="button"
+                class="botao botao-secundario"
+                onclick="irParaProdutos()"
+            >
                 Voltar aos produtos
             </button>
+
         </section>
 
-        <section id="formulario-pedido" class="formulario-area" hidden>
+        <!-- FORMULÁRIO DE FINALIZAÇÃO -->
+
+        <section
+            id="formulario-pedido"
+            class="formulario-area"
+            hidden
+        >
+
             <h2>Finalizar pedido</h2>
-            <p>Confira seus produtos, preencha os dados e escolha a forma de pagamento.</p>
+
+            <p>
+                Confira seus produtos, preencha os dados e escolha
+                a forma de pagamento.
+            </p>
 
             <div class="resumo-pedido">
+
                 <h3>Resumo da compra</h3>
+
                 <div id="resumo-pedido"></div>
+
                 <p class="total-formulario">
-                    Total do pedido: <strong id="total-formulario">R$ 0,00</strong>
+                    Total do pedido:
+                    <strong id="total-formulario">R$ 0,00</strong>
                 </p>
+
             </div>
 
-         <form id="formulario">
+            <form id="formulario">
 
-    <div class="campo">
-        <label for="nome">Nome completo:</label>
-        <input
-            type="text"
-            id="nome"
-            name="nome"
-            autocomplete="name"
-            maxlength="120"
-            required
-        >
-    </div>
+                <div class="campo">
 
-    <div class="campo">
-        <label for="whatsapp">WhatsApp:</label>
-        <input
-            type="tel"
-            id="whatsapp"
-            name="whatsapp"
-            autocomplete="tel"
-            placeholder="(00) 00000-0000"
-            maxlength="25"
-            required
-        >
-    </div>
+                    <label for="nome">Nome completo:</label>
 
-    <div class="aviso-pagamento">
-        <h3>Pagamento seguro</h3>
-        <p>
-            Para confirmar seu pedido, você será direcionado
-            ao ambiente seguro da InfinitePay.
-        </p>
-        <p>
-            Você poderá escolher entre Pix e cartão de crédito.
-            O pedido será confirmado após a aprovação do pagamento.
-        </p>
-    </div>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        autocomplete="name"
+                        maxlength="120"
+                        required
+                    >
 
-    <p
-        id="mensagem-pedido"
-        class="mensagem-pedido"
-        role="status"
-        aria-live="polite"
-    ></p>
+                </div>
 
-    <button
-        type="submit"
-        id="confirmar-pedido"
-        class="botao"
-    >
-        Continuar para pagamento
-    </button>
+                <div class="campo">
 
-    <button
-        type="button"
-        id="novo-pedido"
-        class="botao"
-        onclick="novoPedido()"
-        hidden
-    >
-        Fazer novo pedido
-    </button>
+                    <label for="whatsapp">WhatsApp:</label>
 
-</form>
+                    <input
+                        type="tel"
+                        id="whatsapp"
+                        name="whatsapp"
+                        autocomplete="tel"
+                        placeholder="(00) 00000-0000"
+                        maxlength="25"
+                        required
+                    >
+
+                </div>
+
+                <div class="aviso-pagamento">
+
+                    <h3>Pagamento seguro</h3>
+
+                    <p>
+                        Para confirmar seu pedido, você será direcionado
+                        ao ambiente seguro da InfinitePay.
+                    </p>
+
+                    <p>
+                        Você poderá escolher entre Pix e cartão de crédito.
+                        O pedido será confirmado após a aprovação do pagamento.
+                    </p>
+
+                </div>
+
+                <p
+                    id="mensagem-pedido"
+                    class="mensagem-pedido"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    type="submit"
+                    id="confirmar-pedido"
+                    class="botao"
+                >
+                    Continuar para pagamento
+                </button>
+
+                <button
+                    type="button"
+                    id="novo-pedido"
+                    class="botao"
+                    onclick="novoPedido()"
+                    hidden
+                >
+                    Fazer novo pedido
+                </button>
+
+            </form>
+
         </section>
+
     </main>
 
     <footer class="rodape">
+
         <p>JEPP 2026 — ETAM "SÃO FRANCISCO DE ASSIS"</p>
+
         <p>Colina - SP</p>
+
         <p>Educação, empreendedorismo e criatividade.</p>
+
     </footer>
+
 </body>
 </html>
